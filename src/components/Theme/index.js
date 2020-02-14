@@ -11,11 +11,13 @@ export const ThemeContext = React.createContext({
 export class Provider extends Component {
   themeConfigs = {};
   branding = defaultBranding;
+  fontFamily = null;
 
   constructor(props) {
     super(props);
     if (props.branding) {
       this.branding = mergeDeep(this.branding, props.branding);
+      this.fontFamily = props.fontFamily ? props.fontFamily : null;
     }
   }
 
@@ -33,10 +35,12 @@ export class Provider extends Component {
       )
     );
 
+    const style = themeConfig.style ? themeConfig.style : {};
+    if(this.props.fontFamily)
+      style['fontFamily'] = this.props.fontFamily;
+
     return (this.themeConfigs[name] = {
-      computedStyle: themeConfig.style
-        ? StyleSheet.create(themeConfig.style)
-        : {},
+      computedStyle: StyleSheet.create(style),
       props: themeConfig.props
     });
   };
